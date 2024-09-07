@@ -36,6 +36,7 @@ import { Skia } from '@shopify/react-native-skia'
 import { useSharedValue as useSharedValue2, useRunOnJS } from 'react-native-worklets-core'
 import { FFmpegKit } from 'ffmpeg-kit-react-native'
 import { useResizePlugin } from 'vision-camera-resize-plugin'
+import { startStreaming } from './views/startStreaming'
 const ReanimatedCamera = Reanimated.createAnimatedComponent(Camera)
 Reanimated.addWhitelistedNativeProps({
   zoom: true,
@@ -47,6 +48,17 @@ const SCALE_FULL_ZOOM = 3
 const START_TIME = 'startTime';
 const FRAMES = 'frames';
 
+// For JS/TS
+// import { VisionCameraProxy, Frame } from 'react-native-vision-camera'
+
+
+// export function startStreaming(frame: Frame) {
+//   'worklet'
+//   if (plugin == null) {
+//     throw new Error("Failed to load Frame Processor Plugin!")
+//   }
+//   return plugin.call(frame)
+// }
 
 
 type Props = NativeStackScreenProps<Routes, 'CameraPage'>
@@ -335,7 +347,8 @@ export function CameraPage({ navigation }: Props): React.ReactElement {
     }
 
     // console.log("Pixel==>", firstPixel)
-
+    // const start = startStreaming(frame);
+    // console.log("start==g>j", start)
 
     // if (isCollectingFrames) {
     //   // collectFrame(frame);
