@@ -15,5 +15,6 @@ export function startStreaming(frame: Frame) {
     someNumber: 42,
     someObject: { test: 0, second: 'test' },
     someArray: ['another test', 5],
+    url: "http://commondata.storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
   }) as string[]
 }

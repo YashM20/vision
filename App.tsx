@@ -22,6 +22,7 @@ import 'react-native-gesture-handler';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { VisionCameraApp } from './src';
 import { NavigationContainer } from '@react-navigation/native';
+import Example from './src/components/Example';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -94,6 +95,7 @@ function App(): React.JSX.Element {
           </View>
         </ScrollView> */}
           <VisionCameraApp />
+          {/* <Example /> */}
         </SafeAreaView>
       </GestureHandlerRootView>
     </NavigationContainer>

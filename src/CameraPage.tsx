@@ -232,175 +232,45 @@ export function CameraPage({ navigation }: Props): React.ReactElement {
   //   // exampleKotlinSwiftPlugin(frame)
   // })
   // }, [])
-  var counter = 0
-
-  const processCollectedFrames = (frames) => {
-    console.log(`Collected ${frames.length} frames in 10 seconds`);
-    // Process the frames as needed
-  };
-  const collectFrame = (frame) => {
-    'worklet';
-    const currentTime = performance.now();
-    if (sharedValues[START_TIME].value === 0) {
-      sharedValues[START_TIME].value = currentTime;
-    }
-
-    const elapsedTime = currentTime - sharedValues[START_TIME].value;
-    if (elapsedTime <= 10000) { // 10 seconds in milliseconds
-      const buffer = frame.toArrayBuffer();
-      sharedValues[FRAMES].value = [...sharedValues[FRAMES].value, buffer];
-    } else if (isCollectingFrames) {
-      console.log("collected frames", sharedValues[FRAMES].value.length);
-      // runOnJS(setIsCollectingFrames)(false);
-      // runOnJS(processCollectedFrames)(sharedValues[FRAMES].value);
-    }
-  };
-  // Save the raw buffer to a file
-  // const saveBufferToFile = async (buffer: ArrayBuffer, fileName: string) => {
-  //   "worklet";
-  //   const path = `${RNFS.CachesDirectoryPath}/${fileName}`;
-  //   console.log(`Saving file to ${path}`);
-  //   RNFS.writeFile(path, Buffer?.from(buffer), 'base64').then(() => {
-  //     console.log(`File saved to ${path}`);
-  //   }).catch((err) => {
-  //     console.log(`Error saving file: ${err}`);
-  //   });
-  //   return path;
-  // };
-
-  // Process the file with FFmpeg Kit
-  // const processFileWithFFmpeg = async (inputFilePath: string, outputFilePath: string) => {
-  //   const command = `-i ${inputFilePath} -vf scale=640:480 ${outputFilePath}`;
-  //   FFmpegKit.executeAsync(command).then((session) => {
-  //     console.log(`FFmpeg process started with sessionId ${session.getSessionId()}`);
-  //     session.getReturnCode().then((returnCode) => {
-  //       console.log(`FFmpeg process exited with returnCode ${returnCode}`);
-  //       if (returnCode == 0) {
-  //         console.log(`FFmpeg process succeeded`);
-  //       } else {
-  //         console.log(`FFmpeg process failed`);
-  //       }
-  //     });
-  //   });
-
-  // };
-  const onFrameCollected = useRunOnJS((frame) => {
-    'worklet'
-    console.log("onFrameCollected",);
-    const buffer = frame.toArrayBuffer();
-    const nativeBuffer = frame.getNativeBuffer();
-    console.log("onFrameCollected-p", buffer.byteLength, collectedFrames.length, nativeBuffer, buffer);
-
-
-
-
-
-    runAsync(frame, async () => {
-      "worklet";
-      // const buffer = frame.toArrayBuffer(); // Get frame data
-      // saveBufferToFile(buffer, 'input.raw');
-      // console.log("onFrameCollected- inputFilePath", inputFilePath);
-      // const outputFilePath = `${RNFS.CachesDirectoryPath}/output.png`;
-      // console.log("onFrameCollected- outputFilePath", outputFilePath);
-
-      // await processFileWithFFmpeg(inputFilePath, outputFilePath);
-
-      // const buffer = frame.getNativeBuffer().toString()
-      // console.log(Object.keys(buffer))
-    })
-
-  }, []);
-
-  const progress = useSharedValue2(0)
 
   const frameProcessor = useFrameProcessor((frame) => {
     'worklet'
-    // console.log(`Frame: ${frame.width}x${frame.height} (${frame.pixelFormat}) - ${JSON.stringify(frame.timestamp)}`)
-    // console.log("sharedval", progress.value)
-    // frame.render()
 
-    // const centerX = frame.width / 2
-    // const centerY = frame.height / 2
-    // const rect = Skia.XYWHRect(centerX, centerY, 150, 150)
-    // const paint = Skia.Paint()
-    // paint.setColor(Skia.Color('red'))
-    // frame.drawRect(rect, paint)
-    // console.log(isRecording, counter, collectedFrames.length);
-    // if (isCollectingFrames) {
-    //   collectFrame(frame);
+
+    // const resized = resize(frame, {
+    //   scale: {
+    //     width: 192,
+    //     height: 192
+    //   },
+    //   pixelFormat: 'rgb',
+    //   dataType: 'uint8'
+    // })
+
+    // const firstPixel = {
+    //   r: resized[0],
+    //   g: resized[1],
+    //   b: resized[2]
     // }
 
-
-    const resized = resize(frame, {
-      scale: {
-        width: 192,
-        height: 192
-      },
-      pixelFormat: 'rgb',
-      dataType: 'uint8'
+    // runAtTargetFps(1, () => {
+    //   'worklet'
+    //   console.log("I'm running synchronously at 1 FPS!")
+    runAsync(frame, async () => {
+      'worklet'
+      console.log("I'm running asynchronously, possibly at a lower FPS rate!")
+      const start = startStreaming(frame);
+      console.log("start==g>j", start)
     })
 
-    const firstPixel = {
-      r: resized[0],
-      g: resized[1],
-      b: resized[2]
-    }
+
+    // })
 
     // console.log("Pixel==>", firstPixel)
     // const start = startStreaming(frame);
     // console.log("start==g>j", start)
 
-    // if (isCollectingFrames) {
-    //   // collectFrame(frame);
-    //   const currentTime = new Date().getTime();
-    //   // console.log("collecting frames", startTimeRef.current, currentTime,);
 
-
-    //   if (currentTime - startTimeRef.current <= 2000) {
-    //     // console.log("collecting frames0----", currentTime - startTimeRef.current);
-
-
-    //     // setCollectedFrames((prevFrames) => [...prevFrames, buffer]);
-    //     // sharedCollectedFrames.value = [...sharedCollectedFrames.value, buffer];
-
-    //     onFrameCollected(frame);
-
-    //   }
-    //   if (startTimeRef.current === null) {
-    //     startTimeRef.current = currentTime;
-    //     console.log("start time", startTimeRef.current);
-    //   }
-    // }
-    // RNFS.writeFile(filePath, frame., 'base64')
-    //   .then(() => {
-    //     setCollectedFrames((prevFrames) => [...prevFrames, filePath]);
-    //   })
-    //   .catch((err) => console.log(err));
-    // }
-  }, [isCollectingFrames])
-
-
-
-  // const setStartTime = (time) => {
-  //   startTimeRef.current = time;
-  // };
-
-  // const addFrame = (buffer) => {
-  //   setCollectedFrames((prevFrames) => [...prevFrames, buffer]);
-  // };
-
-  const stopCollecting = () => {
-    setIsCollecting(false);
-    console.log(`Collected ${collectedFrames.length} frames in 10 seconds`);
-    // Here you can process or save the collected frames
-  };
-
-  // Add a button to start collecting frames
-  const startCollecting = () => {
-    setCollectedFrames([]);
-    startTimeRef.current = null;
-    setIsCollecting(true);
-  };
+  }, [])
 
   const videoHdr = format?.supportsVideoHdr && enableHdr
   const photoHdr = format?.supportsPhotoHdr && enableHdr && !videoHdr

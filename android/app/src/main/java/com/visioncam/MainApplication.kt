@@ -14,6 +14,8 @@ import com.facebook.soloader.SoLoader
 import com.mrousavy.camera.frameprocessors.FrameProcessorPluginRegistry
 import com.visioncam.rtmpstreamprocessor.RtmpStreamProcessorPluginPackage
 
+// import com.arthenica.ffmpegkit.FFmpegKit;
+
 class MainApplication : Application(), ReactApplication {
 
   override val reactNativeHost: ReactNativeHost =
