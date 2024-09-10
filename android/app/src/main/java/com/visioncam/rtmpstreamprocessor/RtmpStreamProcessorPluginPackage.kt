@@ -9,14 +9,21 @@ import com.mrousavy.camera.frameprocessors.FrameProcessorPluginRegistry
 
 class RtmpStreamProcessorPluginPackage : ReactPackage {
   companion object {
-    init {
+    fun initialize(reactContext: ReactApplicationContext) {
+      // Pass the ReactApplicationContext to the RtmpStreamProcessorPlugin
       FrameProcessorPluginRegistry.addFrameProcessorPlugin("startStreaming") { proxy, options ->
-        RtmpStreamProcessorPlugin(proxy, options)
+        RtmpStreamProcessorPlugin(reactContext, proxy, options) // Now we pass the reactContext
       }
     }
+    // init {
+    //   FrameProcessorPluginRegistry.addFrameProcessorPlugin("startStreaming") { proxy, options ->
+    //     RtmpStreamProcessorPlugin(proxy, options)
+    //   }
+    // }
   }
 
   override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
+    initialize(reactContext)
     return emptyList()
   }
 

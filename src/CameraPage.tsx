@@ -75,6 +75,7 @@ export function CameraPage({ navigation }: Props): React.ReactElement {
   const isFocussed = useIsFocused()
   const isForeground = useIsForeground()
   const isActive = isFocussed && isForeground
+  const isEnabled = useSharedValue2(isActive);
 
   const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('back')
   const [enableHdr, setEnableHdr] = useState(false)
@@ -86,7 +87,7 @@ export function CameraPage({ navigation }: Props): React.ReactElement {
   // const collectedFrames: ArrayBuffer[] = [];
   const [isCollecting, setIsCollecting] = useState(false);
   const [collectedFrames, setCollectedFrames] = useState([]);
-  const startTimeRef = useRef(null);
+  const startTimeRef = useRef(0);
 
   // Inside your component, before the frameProcessor definition
   const [isCollectingFrames, setIsCollectingFrames] = useState(false);
@@ -232,7 +233,6 @@ export function CameraPage({ navigation }: Props): React.ReactElement {
   //   // exampleKotlinSwiftPlugin(frame)
   // })
   // }, [])
-
   const frameProcessor = useFrameProcessor((frame) => {
     'worklet'
 
@@ -255,11 +255,32 @@ export function CameraPage({ navigation }: Props): React.ReactElement {
     // runAtTargetFps(1, () => {
     //   'worklet'
     //   console.log("I'm running synchronously at 1 FPS!")
-    runAsync(frame, async () => {
+    // runAsync(frame, async () => {
+    runAtTargetFps(1, () => {
       'worklet'
-      console.log("I'm running asynchronously, possibly at a lower FPS rate!")
-      const start = startStreaming(frame);
-      console.log("start==g>j", start)
+      console.log("I'm running asynchronously, possibly at a lower FPS rate!", isEnabled.value)
+      // const start = startStreaming(frame);
+      // console.log("start==g>j", start)
+
+      const currentTime = new Date().getTime();
+      if (startTimeRef.current === null) {
+        console.log("start time is null");
+        return;
+      }
+      if (startTimeRef.current === 0) {
+        startTimeRef.current = currentTime;
+        console.log("start time", startTimeRef.current);
+      }
+      if (currentTime - startTimeRef.current <= 8000) {
+        const start = startStreaming(frame);
+        console.log("start==g>j", currentTime - startTimeRef.current, "==>", start)
+
+        return;
+      }
+
+      isEnabled.value = false;
+
+
     })
 
 
@@ -277,7 +298,7 @@ export function CameraPage({ navigation }: Props): React.ReactElement {
 
   return (
     <View style={styles.container}>
-      {device != null ? (
+      {device != null && isEnabled.value ? (
         <PinchGestureHandler onGestureEvent={onPinchGesture} enabled={isActive}>
           <Reanimated.View onTouchEnd={onFocusTap} style={StyleSheet.absoluteFill}>
             <TapGestureHandler onEnded={onDoubleTap} numberOfTaps={2}>
