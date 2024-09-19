@@ -15,6 +15,6 @@ export function startStreaming(frame: Frame) {
     someNumber: 42,
     someObject: { test: 0, second: 'test' },
     someArray: ['another test', 5],
-    url: "http://commondata.storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
+    url: "rtmp://sfo.contribute.live-video.net/app/live_user_123456789?bandwidthtest=true/live_926313112_yylAyiZVFikn2TkCguqSxeKAkGYAnN"
   }) as string[]
 }

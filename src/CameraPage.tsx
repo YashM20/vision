@@ -256,7 +256,7 @@ export function CameraPage({ navigation }: Props): React.ReactElement {
     //   'worklet'
     //   console.log("I'm running synchronously at 1 FPS!")
     // runAsync(frame, async () => {
-    runAtTargetFps(1, () => {
+    runAtTargetFps(45, () => {
       'worklet'
       console.log("I'm running asynchronously, possibly at a lower FPS rate!", isEnabled.value)
       // const start = startStreaming(frame);
@@ -271,14 +271,14 @@ export function CameraPage({ navigation }: Props): React.ReactElement {
         startTimeRef.current = currentTime;
         console.log("start time", startTimeRef.current);
       }
-      if (currentTime - startTimeRef.current <= 8000) {
+      if (currentTime - startTimeRef.current <= 208000) {
         const start = startStreaming(frame);
         console.log("start==g>j", currentTime - startTimeRef.current, "==>", start)
 
         return;
       }
 
-      isEnabled.value = false;
+      // isEnabled.value = false;
 
 
     })
